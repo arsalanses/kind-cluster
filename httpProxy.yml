@@ -1,0 +1,18 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: basic
+spec:
+  virtualhost:
+    fqdn: local.projectcontour.io
+  routes:
+    - conditions:
+      - prefix: /foo
+      services:
+        - name: foo-service
+          port: 80
+    - conditions:
+      - prefix: /bar
+      services:
+        - name: bar-service
+          port: 80

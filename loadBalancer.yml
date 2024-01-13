@@ -1,0 +1,40 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: foo-app
+  labels:
+    app: whoami
+spec:
+  containers:
+  - name: foo-app
+    image: traefik/whoami:v1.10.1
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: bar-app
+  labels:
+    app: whoami
+spec:
+  containers:
+  - name: bar-app
+    image: traefik/whoami:v1.10.1
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: foo-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: whoami
+  ports:
+  - port: 5678
