@@ -1,36 +1,53 @@
-# apiVersion: networking.k8s.io/v1
-# kind: NetworkPolicy
-# metadata:
-#   name: zerotrust
-#   namespace: default
-# spec:
-#   podSelector: {}
-#   policyTypes:
-#     - Ingress
-#     - Egress
-#   ingress: []
-#   egress:
-#     - to:
-#         - podSelector:
-#             matchLabels: {}
-#       ports:
-#         - protocol: UDP
-#           port: 53
-
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: default-deny-ingress
+  name: ing-http-port
 spec:
-  podSelector: {}
   policyTypes:
   - Ingress
+  podSelector: 
+    matchLabels:
+      app: app
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: curl
+      ports:
+        - protocol: TCP
+          port: 80
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: default-deny-egress
+  name: egr-http-curl
 spec:
-  podSelector: {}
   policyTypes:
   - Egress
+  podSelector: 
+    matchLabels:
+      app: curl
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: app
+      ports:
+        - protocol: TCP
+          port: 80
+---
+# apiVersion: networking.k8s.io/v1
+# kind: NetworkPolicy
+# metadata:
+#   name: default-deny-egress
+# spec:
+#   policyTypes:
+#   - Egress
+#   podSelector: {}
+#   egress:
+#     - to:
+#         - ipBlock:
+#             cidr: 192.168.0.0/16
+#       ports:
+#         - protocol: TCP
+#           port: 5978

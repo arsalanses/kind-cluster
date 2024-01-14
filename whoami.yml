@@ -1,0 +1,42 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: curl
+  labels:
+    app: curl
+spec:
+  containers:
+  - image: nginx:1.25.3-bookworm
+    name: curl
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+  dnsConfig:
+    nameservers:
+      - 8.8.8.8
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: whoami-app
+  labels:
+    app: app
+spec:
+  containers:
+  - image: traefik/whoami:v1.10.1
+    name: whoami-app
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: app-service
+spec:
+  selector:
+    app: app
+  ports:
+  - port: 80

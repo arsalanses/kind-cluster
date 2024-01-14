@@ -6,11 +6,12 @@ docker pull traefik/whoami:v1.10.1
 kind load docker-image traefik/whoami:v1.10.1
 
 kind load docker-image nginx:1.25.3-bookworm
+kubectl exec -it pods/nginx -- bash
 
 kind load docker-image nicolaka/netshoot:1.0.0
 kubectl run -it --rm netshoot --image=nicolaka/netshoot:1.0.0 --restart=Never -- bash
 
-curl foo-service.default.svc.cluster.local
+curl app-service.default.svc.cluster.local
 
 docker exec -i kind-control-plane sh -c 'crictl images'
 
